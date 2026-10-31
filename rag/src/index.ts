@@ -4,7 +4,7 @@ import 'dotenv/config';
 import { QdrantVectorStore } from "@langchain/qdrant";
 
 async function generateVectorEmbeddingForFile(filepath: string) {
-  
+   
   try {
     if(process.env.GOOGLE_API_KEY === undefined) {
         throw new Error("GOOGLE_API_KEY is not defined in the environment variables.");
@@ -19,12 +19,6 @@ async function generateVectorEmbeddingForFile(filepath: string) {
     model: "gemini-embedding-2",
   });
   
-  // GoogleModel.embedDocuments(docs.map(doc => doc.pageContent)).then((embeddings) => {
-  //   console.log("Embeddings generated successfully:", embeddings);
-  // }).catch((error) => {
-  //   console.error("Error generating embeddings:", error);
-  // })
-
   // store
     const vectorStore = await QdrantVectorStore.fromExistingCollection(
        GoogleModel,
