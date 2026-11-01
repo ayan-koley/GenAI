@@ -1,0 +1,9 @@
+services:
+  database:
+    image: postgres
+    container_name: postgres-chatgpt-clone
+    environment:
+      POSTGRES_DB: chatgpt
+      POSTGRES_PASSWORD: admin
+    ports:
+      - 5432:5432
