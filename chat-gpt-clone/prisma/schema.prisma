@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id String @id @default(uuid())
+  email String?
+  fullName String?
+  imageUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  chats Chat[]
+  usage_logs Usage_log?
+}
+
+model Model {
+  id String @id @default(uuid())
+  provider String
+  model_name String
+  display_name String
+  description String?
+  context_limit Int
+  is_active Boolean @default(true)
+  createdAt DateTime @default(now())
+
+  chats Chat[]
+  ussage_logs Usage_log?
+}
+
+model Chat {
+  id String @id @default(uuid())
+  user_id String
+  title String
+  is_archived Boolean @default(false)
+  is_pinned Boolean @default(false)
+  model_id String
+  system_prompt String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  model Model @relation(fields: [model_id], references: [id])
+}
+
+model Usage_log {
+  id String @id @default(uuid())
+  user_id String @unique
+  model_id String @unique
+  token_userd Int @default(0)
+  total_tokens Int
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  model Model @relation(fields: [model_id], references: [id])
+}
