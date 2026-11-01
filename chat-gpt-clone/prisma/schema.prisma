@@ -14,13 +14,14 @@ datasource db {
 
 model User {
   id String @id @default(uuid())
+  clear_id String @unique
   email String?
   fullName String?
   imageUrl String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
-  chats Chat[]
+  chats Conversation[]
   usage_logs Usage_log?
 }
 
@@ -34,11 +35,11 @@ model Model {
   is_active Boolean @default(true)
   createdAt DateTime @default(now())
 
-  chats Chat[]
+  chats Conversation[]
   ussage_logs Usage_log?
 }
 
-model Chat {
+model Conversation {
   id String @id @default(uuid())
   user_id String
   title String
