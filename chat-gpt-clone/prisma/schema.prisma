@@ -36,7 +36,7 @@ model Model {
   createdAt DateTime @default(now())
 
   chats Conversation[]
-  ussage_logs Usage_log?
+  ussage_logs Usage_log[]
   messages Message[]
 }
 
@@ -59,7 +59,7 @@ model Conversation {
 model Usage_log {
   id String @id @default(uuid())
   user_id String @unique
-  model_id String @unique
+  model_id String
   token_userd Int @default(0)
   total_tokens Int
   createdAt DateTime @default(now())
@@ -68,16 +68,30 @@ model Usage_log {
   model Model @relation(fields: [model_id], references: [id])
 }
 
+enum MessageStatus {
+  PENDING
+  COMPLETE
+  ERROR
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
 model Message {
   id String @id @default(uuid())
   conversation_id String
-  role String
+  role MessageRole
   content String
   model_id String
   token_used Int
   metadata Json?
+  status MessageStatus @default(PENDING)
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   conversation Conversation @relation(fields: [conversation_id], references: [id], onDelete: Cascade)
   model Model @relation(fields: [model_id], references: [id])
