@@ -4,8 +4,7 @@ import {
     deleteConversationRecord,
     getConversationMessages as loadConversationMessages,
     getUserConversations,
-    renameConversationRecord,
-    sendConversationMessage
+    renameConversationRecord
 } from "./conversation.services.js";
 export async function getConversations(req: Request, res: Response): Promise<void> {
     try {
@@ -74,18 +73,6 @@ export async function deleteConversation(req: Request, res: Response): Promise<v
     } catch (error: any) {
         res.status(500).json({
             message: "Failed to delete conversation",
-            error: error.message
-        });
-    }
-}
-
-export async function sendMessage(req: Request, res: Response): Promise<void> {
-    try {
-        await sendConversationMessage(req);
-        res.status(200).json({ message: "Message sent successfully" });
-    } catch (error: any) {
-        res.status(500).json({
-            message: "Failed to send message",
             error: error.message
         });
     }
