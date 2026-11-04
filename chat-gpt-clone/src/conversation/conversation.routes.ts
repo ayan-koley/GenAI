@@ -14,7 +14,7 @@ const router = Router()
 router.use(requiredAuth)
 
 router.route('/').get(getConversations).post(createConversation)
-router.route('/:conversationId/messages').get(getConversationMessages).post(sendMessage)
+router.route('/:conversationId/messages').get(getConversationMessages)
 router.route('/:conversationId').patch(updateConversation).delete(deleteConversation)
 
 export default router
