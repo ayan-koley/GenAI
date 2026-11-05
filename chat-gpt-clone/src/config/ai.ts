@@ -1,7 +1,8 @@
 import { google } from "@ai-sdk/google"
 
-const DEFAULT_CHAT_MODEL = "gemini-4-argon"
+const DEFAULT_CHAT_MODEL = "gemini-3.6-flash"
 
 export function getChatModel(modelId?: string | null) {
-    return google(modelId || DEFAULT_CHAT_MODEL)
+    return google(DEFAULT_CHAT_MODEL)
+    
 }
