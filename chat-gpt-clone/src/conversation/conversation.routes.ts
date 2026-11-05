@@ -4,7 +4,6 @@ import {
     deleteConversation,
     getConversationMessages,
     getConversations,
-    sendMessage,
     updateConversation
 } from './conversation.controllers.js'
 import { requiredAuth } from '../middleware/auth.middleware.js'
