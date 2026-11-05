@@ -15,7 +15,7 @@ export type MessageItem = {
 
 async function assertOwnsConversation(conversationId: string, userId: string) {
     const conversation = await prisma.conversation.findFirst({
-        where: { id: conversationId, userId },
+        where: { id: conversationId, user_id: userId },
     });
 
     if (!conversation) {
@@ -79,7 +79,7 @@ export async function listMessages(
     await prisma.conversation.update({
       where: { id: conversationId },
       data: {
-        lastMessageAt: new Date(),
+        // lastMessageAt: new Date(),
         ...(shouldRename
           ? {
               title:
