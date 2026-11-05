@@ -14,31 +14,33 @@ datasource db {
 
 model User {
   id String @id @default(uuid())
+  clear_id String @unique
   email String?
   fullName String?
   imageUrl String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
-  chats Chat[]
+  chats Conversation[]
   usage_logs Usage_log?
 }
 
 model Model {
   id String @id @default(uuid())
   provider String
-  model_name String
+  model_name String @unique
   display_name String
   description String?
   context_limit Int
   is_active Boolean @default(true)
   createdAt DateTime @default(now())
 
-  chats Chat[]
-  ussage_logs Usage_log?
+  chats Conversation[]
+  ussage_logs Usage_log[]
+  messages Message[]
 }
 
-model Chat {
+model Conversation {
   id String @id @default(uuid())
   user_id String
   title String
@@ -51,16 +53,46 @@ model Chat {
 
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
   model Model @relation(fields: [model_id], references: [id])
+  messages Message[]
 }
 
 model Usage_log {
   id String @id @default(uuid())
   user_id String @unique
-  model_id String @unique
+  model_id String
   token_userd Int @default(0)
   total_tokens Int
   createdAt DateTime @default(now())
 
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  model Model @relation(fields: [model_id], references: [id])
+}
+
+enum MessageStatus {
+  PENDING
+  COMPLETE
+  ERROR
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+model Message {
+  id String @id @default(uuid())
+  conversation_id String
+  role MessageRole
+  content String
+  model_id String
+  token_used Int
+  metadata Json?
+  status MessageStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  conversation Conversation @relation(fields: [conversation_id], references: [id], onDelete: Cascade)
   model Model @relation(fields: [model_id], references: [id])
 }
